@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# firebase ta ignore kore rakhi
+firebase.config.js
