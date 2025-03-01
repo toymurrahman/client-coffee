@@ -1,114 +1,123 @@
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
+import { useState } from "react";
 
 const AddCoffee = () => {
+  const [isLoading, setIsLoading] = useState(false);
 
+  const handleAddCoffee = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const newCoffee = {
+      name: form.name.value,
+      chef: form.chef.value,
+      supplier: form.supplier.value,
+      taste: form.taste.value,
+      category: form.category.value,
+      details: form.details.value,
+      photo: form.photo.value,
+    };
 
-    const handleAddCoffee = e => {
-        e.preventDefault();
-        const name = e.target.name.value;
-        const chef = e.target.chef.value;
-        const supplier = e.target.supplier.value;
-        const taste = e.target.taste.value;
-        const category = e.target.category.value;
-        const details = e.target.details.value;
-        const photo = e.target.photo.value;
-        const newCoffee = { name, chef, supplier, taste, category, details, photo }
-        console.log(newCoffee)
-        fetch('http://localhost:5000/coffee', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(newCoffee)
-        })
-        .then(res => res.json()) 
-        .then(data => {console.log(data);
-            Swal.fire({
-                title: 'Success!',
-                text: 'New coffee has been added!',
-                icon:'success',
-                confirmButtonText: 'Okay'
-            })})
-   
+    setIsLoading(true); // Set loading state
+
+    try {
+      const res = await fetch("http://localhost:5000/coffee", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newCoffee),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        Swal.fire({
+          title: "Success!",
+          text: "New coffee has been added!",
+          icon: "success",
+          confirmButtonText: "Okay",
+        });
+        form.reset(); // Reset form after submission
+      } else {
+        throw new Error("Failed to add coffee.");
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "Okay",
+      });
+    } finally {
+      setIsLoading(false); // Reset loading state
     }
-    return (
-        <div className='lg:w-3/4 mx-auto'>
-            <div className="text-center p-10">
-                <h1 className="text-5xl font-bold " >Add Coffee!!</h1>
-                <p className="py-6">
-                    Provident cupiditate voluptatem et in.Quaerat fugiat ut assumenda excepturi exercitationem
-                    quasi. In deleniti eaque aut repudiandae et a id nisi.
-                </p>
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-red-900">☕ Add a New Coffee</h1>
+        <p className="text-gray-500 mt-2">Add a new coffee to our collection. Fill in the details below.</p>
+      </div>
+
+      <div className="card bg-base-100 shadow-xl p-6">
+        <form onSubmit={handleAddCoffee} className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="form-control">
+              <label className="label"><span className="label-text text-red-900">Name</span></label>
+              <input type="text" name="name" placeholder="Coffee Name" className="input input-bordered" required />
             </div>
-            <div className="card bg-base-100 w-full shrink-0 shadow-2xl">
-                <form onSubmit={handleAddCoffee}  className="card-body bg-red-50">
-                    {/* form first row */}
-                    <div className='flex flex-col lg:flex-row gap-5'>
-                        <div className="form-control flex-1">
-                            <label className="label">
-                                <span className="label-text">Name</span>
-                            </label>
-                            <input type="text" name='name' placeholder="coffee name" className="input input-bordered" required />
-                        </div>
-                        <div className="form-control flex-1">
-                            <label className="label">
-                                <span className="label-text">Chef</span>
-                            </label>
-                            <input type="text" name='chef' placeholder="chef name" className="input input-bordered" required />
-                        </div>
-                    </div>
-                    {/* form second row */}
-                    <div className='flex flex-col lg:flex-row gap-5'>
-                        <div className="form-control flex-1">
-                            <label className="label">
-                                <span className="label-text">Supplier</span>
-                            </label>
-                            <input type="text" name='supplier' placeholder="coffee supplier" className="input input-bordered" required />
-                        </div>
-                        <div className="form-control flex-1">
-                            <label className="label">
-                                <span className="label-text">Taste</span>
-                            </label>
-                            <input type="text" name='taste' placeholder="taste name" className="input input-bordered" required />
-                        </div>
-                    </div>
-                    {/* form third row */}
-                    <div className='flex flex-col lg:flex-row gap-5'>
-                        <div className="form-control flex-1">
-                            <label className="label">
-                                <span className="label-text">Category</span>
-                            </label>
-                            <input type="text" name='category' placeholder="coffee Category" className="input input-bordered" required />
-                        </div>
-                        <div className="form-control flex-1">
-                            <label className="label">
-                                <span className="label-text">Details</span>
-                            </label>
-                            <input type="text" name='details' placeholder="Coffee Details" className="input input-bordered" required />
-                        </div>
-                    </div>
-
-
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Photo URL</span>
-                        </label>
-                        <input type="text" name='photo' placeholder="Photo url" className="input input-bordered" required />
-
-                    </div>
-                    <div className="form-control mt-6">
-                        <button className="btn btn-primary">Add Coffee</button>
-                    </div>
-                </form>
+            <div className="form-control">
+              <label className="label"><span className="label-text text-red-900">Chef</span></label>
+              <input type="text" name="chef" placeholder="Chef Name" className="input input-bordered" required />
             </div>
-            
-            <a href="/">
-          <button className="btn btn-circle bg-indigo-600 text-white">
-            Back to Home
-          </button>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="form-control">
+              <label className="label"><span className="label-text text-red-900">Supplier</span></label>
+              <input type="text" name="supplier" placeholder="Supplier Name" className="input input-bordered" required />
+            </div>
+            <div className="form-control">
+              <label className="label"><span className="label-text text-red-900">Taste</span></label>
+              <input type="text" name="taste" placeholder="Taste Profile" className="input input-bordered" required />
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="form-control">
+              <label className="label"><span className="label-text text-red-900">Category</span></label>
+              <input type="text" name="category" placeholder="Category" className="input input-bordered" required />
+            </div>
+            <div className="form-control">
+              <label className="label"><span className="label-text text-red-900">Details</span></label>
+              <textarea name="details" placeholder="Coffee Details" className="textarea textarea-bordered" required></textarea>
+            </div>
+          </div>
+
+          <div className="form-control">
+            <label className="label"><span className="label-text text-red-900">Photo URL</span></label>
+            <input type="text" name="photo" placeholder="Photo URL" className="input input-bordered" required />
+          </div>
+
+          <div className="form-control mt-6">
+            <button
+              type="submit"
+              className={`btn ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-red-500 to-red-900 text-white hover:shadow-lg"}`}
+              disabled={isLoading}
+            >
+              {isLoading ? "Adding..." : "Add Coffee"}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div className="mt-6 text-center">
+        <a href="/" className="btn btn-outline text-red-900 border-red-900 hover:bg-red-900 hover:text-white">
+          ⬅ Back to Home
         </a>
-        </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default AddCoffee;
