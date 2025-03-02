@@ -21,7 +21,7 @@ const AddCoffee = () => {
     setIsLoading(true); // Set loading state
 
     try {
-      const res = await fetch("http://localhost:5000/coffee", {
+      const res = await fetch("https://server-coffee-store.vercel.app/coffee", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const AddCoffee = () => {
 
   return (
     <div>
-      <Header/>
+  
         <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-red-900">☕ Add a New Coffee</h1>

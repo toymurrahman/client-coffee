@@ -1,9 +1,9 @@
-import Header from "./Header";
+
 
 const About = () => {
   return (
   <div>
-    <Header />
+  
       <div className="flex items-center justify-center min-h-screen bg-gray-100 p-6">
       <div className="card w-3/4 bg-white shadow-xl p-8 text-gray-900">
         <h2 className="text-center text-3xl font-bold mb-4 text-red-900">

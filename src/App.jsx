@@ -3,8 +3,7 @@ import { useLoaderData } from "react-router-dom";
 import "./App.css";
 import CoffeeCard from "./components/CoffeeCard";
 import { useState } from "react";
-import Header from "./components/Header";
-import Footer from "./components/footer";
+
 
 
 function App() {
@@ -13,7 +12,7 @@ function App() {
   const [coffe,setCoffe] = useState(coffees);
     return (
         <div>
-          <Header/>
+       
             <div className="flex flex-col gap-10 mt-20">
         <h1 className="text-2xl">Coffee for you....</h1>
         <p>
@@ -43,7 +42,7 @@ function App() {
           </button>
         </a>
       </div>
-      <Footer/>
+ 
         </div>
     );
  
